@@ -46,10 +46,10 @@ class ManagerAPI {
   String defaultApiUrl = 'https://api.revanced.app/';
   String defaultRepoUrl = 'https://api.github.com';
   String defaultPatcherRepo = 'revanced/revanced-patcher';
-  String defaultPatchesRepo = 'revanced/revanced-patches';
-  String defaultIntegrationsRepo = 'revanced/revanced-integrations';
+  String defaultPatchesRepo = 'inotia00/revanced-patches';
+  String defaultIntegrationsRepo = 'inotia00/revanced-integrations';
   String defaultCliRepo = 'revanced/revanced-cli';
-  String defaultManagerRepo = 'revanced/revanced-manager';
+  String defaultManagerRepo = 'inotia00/revanced-manager';
   String? patchesVersion = '';
   String? integrationsVersion = '';
 
@@ -419,7 +419,7 @@ class ManagerAPI {
 
   Future<File?> downloadPatches() async {
     try {
-      final String repoName = !isUsingAlternativeSources() ? defaultPatchesRepo : getPatchesRepo();
+      final String repoName = getPatchesRepo();
       final String currentVersion = await getCurrentPatchesVersion();
       final String url = getPatchesDownloadURL();
       return await _githubAPI.getReleaseFile(
@@ -438,7 +438,7 @@ class ManagerAPI {
 
   Future<File?> downloadIntegrations() async {
     try {
-      final String repoName = !isUsingAlternativeSources() ? defaultIntegrationsRepo : getIntegrationsRepo();
+      final String repoName = getIntegrationsRepo();
       final String currentVersion = await getCurrentIntegrationsVersion();
       final String url = getIntegrationsDownloadURL();
       return await _githubAPI.getReleaseFile(
@@ -456,75 +456,54 @@ class ManagerAPI {
   }
 
   Future<File?> downloadManager() async {
-    return await _revancedAPI.getLatestReleaseFile(
-      '.apk',
-      defaultManagerRepo,
-    );
+    return await _revancedAPI.downloadManager();
   }
 
   Future<String?> getLatestPatchesReleaseTime() async {
-    if (!isUsingAlternativeSources()) {
-      return await _revancedAPI.getLatestReleaseTime(
-        '.json',
-        defaultPatchesRepo,
-      );
+    final release = await _githubAPI.getLatestRelease(getPatchesRepo());
+    if (release != null) {
+      final DateTime timestamp = DateTime.parse(release['created_at'] as String);
+      return format(timestamp, locale: 'en_short');
     } else {
-      final release =
-          await _githubAPI.getLatestRelease(getPatchesRepo());
-      if (release != null) {
-        final DateTime timestamp =
-            DateTime.parse(release['created_at'] as String);
-        return format(timestamp, locale: 'en_short');
-      } else {
-        return null;
-      }
+      return null;
     }
   }
 
   Future<String?> getLatestManagerReleaseTime() async {
-    return await _revancedAPI.getLatestReleaseTime(
-      '.apk',
-      defaultManagerRepo,
-    );
-  }
-
-  Future<String?> getLatestManagerVersion() async {
-    return await _revancedAPI.getLatestReleaseVersion(
-      '.apk',
-      defaultManagerRepo,
-    );
-  }
-
-  Future<String?> getLatestIntegrationsVersion() async {
-    if (!isUsingAlternativeSources()) {
-      return await _revancedAPI.getLatestReleaseVersion(
-        '.apk',
-        defaultIntegrationsRepo,
-      );
+    final release = await _githubAPI.getLatestManagerRelease(defaultManagerRepo);
+    if (release != null) {
+      final DateTime timestamp = DateTime.parse(release['created_at'] as String);
+      return format(timestamp, locale: 'en_short');
     } else {
-      final release = await _githubAPI.getLatestRelease(getIntegrationsRepo());
-      if (release != null) {
-        return release['tag_name'];
-      } else {
-        return null;
-      }
+      return null;
     }
   }
 
-  Future<String?> getLatestPatchesVersion() async {
-    if (!isUsingAlternativeSources()) {
-      return await _revancedAPI.getLatestReleaseVersion(
-        '.json',
-        defaultPatchesRepo,
-      );
+  Future<String?> getLatestManagerVersion() async {
+    final release = await _githubAPI.getLatestRelease(defaultManagerRepo);
+    if (release != null) {
+      return release['tag_name'];
     } else {
-      final release =
-          await _githubAPI.getLatestRelease(getPatchesRepo());
-      if (release != null) {
-        return release['tag_name'];
-      } else {
-        return null;
-      }
+      return null;
+    }
+  }
+
+  Future<String?> getLatestIntegrationsVersion() async {
+    final release = await _githubAPI.getLatestRelease(getIntegrationsRepo());
+    if (release != null) {
+      return release['tag_name'];
+    } else {
+      return null;
+    }
+  }
+  }
+
+  Future<String?> getLatestPatchesVersion() async {
+    final release = await _githubAPI.getLatestRelease(getPatchesRepo());
+    if (release != null) {
+      return release['tag_name'];
+    } else {
+      return null;
     }
   }
 
