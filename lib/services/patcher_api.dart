@@ -193,6 +193,7 @@ class PatcherAPI {
             'tmpDirPath': tmpDir.path,
             'keyStoreFilePath': _keyStoreFile.path,
             'keystorePassword': _managerAPI.getKeystorePassword(),
+            'ripLibs': _managerAPI.isRipLibsEnabled(),
           },
         );
       } on Exception catch (e) {

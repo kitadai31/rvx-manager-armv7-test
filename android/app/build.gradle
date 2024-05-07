@@ -114,5 +114,5 @@ flutter {
 
 dependencies {
     implementation("app.revanced:revanced-patcher:19.3.1")
-    implementation("app.revanced:revanced-library:2.2.1")
+    implementation("app.revanced:revanced-library:2.3.0")
 }

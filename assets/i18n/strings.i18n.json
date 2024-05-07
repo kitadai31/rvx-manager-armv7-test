@@ -203,6 +203,8 @@
     "showUpdateDialogHint": "Show a dialog when a new update is available",
     "universalPatchesLabel": "Show universal patches",
     "universalPatchesHint": "Display all apps and universal patches (may slow down the app list)",
+    "ripLibsLabel": "Remove unused library",
+    "ripLibsHint": "Compile only arm64-v8a architecture",
     "versionCompatibilityCheckLabel": "Version compatibility check",
     "versionCompatibilityCheckHint": "Prevent selecting patches that are not compatible with the selected app version",
     "requireSuggestedAppVersionLabel": "Require suggested app version",

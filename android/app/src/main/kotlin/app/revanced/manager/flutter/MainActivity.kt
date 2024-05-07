@@ -76,6 +76,7 @@ class MainActivity : FlutterActivity() {
                     val tmpDirPath = call.argument<String>("tmpDirPath")
                     val keyStoreFilePath = call.argument<String>("keyStoreFilePath")
                     val keystorePassword = call.argument<String>("keystorePassword")
+                    val ripLibs = call.argument<Boolean>("ripLibs")
 
                     if (
                         inFilePath != null &&
@@ -85,7 +86,8 @@ class MainActivity : FlutterActivity() {
                         options != null &&
                         tmpDirPath != null &&
                         keyStoreFilePath != null &&
-                        keystorePassword != null
+                        keystorePassword != null &&
+                        ripLibs != null
                     ) {
                         cancel = false
                         runPatcher(
@@ -97,7 +99,8 @@ class MainActivity : FlutterActivity() {
                             options,
                             tmpDirPath,
                             keyStoreFilePath,
-                            keystorePassword
+                            keystorePassword,
+                            ripLibs
                         )
                     } else result.notImplemented()
                 }
@@ -217,7 +220,8 @@ class MainActivity : FlutterActivity() {
         options: Map<String, Map<String, Any>>,
         tmpDirPath: String,
         keyStoreFilePath: String,
-        keystorePassword: String
+        keystorePassword: String,
+        ripLibs: Boolean
     ) {
         val inFile = File(inFilePath)
         val outFile = File(outFilePath)
@@ -340,7 +344,13 @@ class MainActivity : FlutterActivity() {
 
                 if (cancel(patcher::close)) return@Thread
 
-                patcherResult.applyTo(inFile)
+                // Use the locally released ReVanced Library.
+                // TODO: reflect this as a lib.patch file so that it can also be used in github actions.
+                if (ripLibs) {
+                    patcherResult.applyTo(inFile, arrayOf("armeabi-v7a", "x86", "x86_64"))
+                } else {
+                    patcherResult.applyTo(inFile, emptyArray<String>())
+                }
 
                 if (cancel(patcher::close)) return@Thread
 
