@@ -42,7 +42,7 @@ class GithubAPI {
     * Loop through all releases (including pre-releases) and return the latest
     */
     try {
-      final Response response = await _dio.get('/repos/$repoName/releases');
+      final Response response = await _dio.get('/repos/$repoName/releases?per_page=10');
       final List<dynamic> releases = response.data;
 
       if (releases.isEmpty) return getLatestRelease(repoName);
@@ -74,7 +74,7 @@ class GithubAPI {
   ) async {
     try {
       final response = await _dio.get(
-        '/repos/$repoName/releases',
+        '/repos/$repoName/releases?per_page=10',
       );
       final Map<String, dynamic> releases = response.data[0];
       int updates = 0;
