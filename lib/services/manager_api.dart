@@ -144,7 +144,7 @@ class ManagerAPI {
   }
 
   bool isPatchesChangeEnabled() {
-    return _prefs.getBool('patchesChangeEnabled') ?? false;
+    return _prefs.getBool('patchesChangeEnabled') ?? true;
   }
 
   void setPatchesChangeEnabled(bool value) {
@@ -497,7 +497,7 @@ class ManagerAPI {
   }
 
   Future<String?> getLatestManagerReleaseTime() async {
-    final release = await _githubAPI.getLatestManagerRelease(defaultManagerRepo);
+    final release = await _githubAPI.getLatestRelease(defaultManagerRepo);
     if (release != null) {
       final DateTime timestamp = DateTime.parse(release['created_at'] as String);
       return format(timestamp, locale: 'en_short');
