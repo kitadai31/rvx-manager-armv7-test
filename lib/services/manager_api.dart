@@ -478,8 +478,11 @@ class ManagerAPI {
   }
 
   Future<File?> downloadManager() async {
-    return await _revancedAPI.downloadManager();
-  }
+    return await _githubAPI.getLatestReleaseFile(
+      '.apk',
+      defaultManagerRepo,
+    );
+ }
 
   Future<String?> getLatestPatchesReleaseTime() async {
     final release = isPreReleasesEnabled()
