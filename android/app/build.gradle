@@ -46,7 +46,7 @@ android {
     buildTypes {
         release {
             ndk {
-                abiFilters 'arm64-v8a'
+                abiFilters 'armeabi-v7a'
             }
             if (System.getenv("signingKey") != null) {
                 signingConfigs {
@@ -77,7 +77,7 @@ android {
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
             ndk {
-                abiFilters 'arm64-v8a'
+                abiFilters 'armeabi-v7a'
             }
         }
         profile {
@@ -87,7 +87,7 @@ android {
             applicationIdSuffix ".profile"
             signingConfig signingConfigs.debug
             ndk {
-                abiFilters 'arm64-v8a'
+                abiFilters 'armeabi-v7a'
             }
         }
     }
@@ -101,7 +101,7 @@ android {
         }
     }
 
-    namespace 'app.revanced.manager.flutter'
+    namespace 'app.armv7test.manager.flutter'
 }
 
 kotlin {
